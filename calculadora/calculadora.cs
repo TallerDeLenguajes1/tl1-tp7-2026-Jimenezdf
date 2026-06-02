@@ -40,7 +40,6 @@ public class Calculadora
         }
     }
 
-    
     public void Limpiar()
     {
         dato = 0;
