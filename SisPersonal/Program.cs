@@ -1,36 +1,27 @@
 ﻿using SisPersonal;
 
-
-Empleado emp1 = new Empleado();
-Empleado emp2 = new Empleado();
-Empleado emp3 = new Empleado();
-
+Empleado[] listaEmpleados = new Empleado[3];
 int contador = 1;
 
 while (contador <= 3)
 {
-    Console.WriteLine("\n=======================================");
-    Console.WriteLine($" REGISTRO DE DATOS - EMPLEADO {contador}");
-    Console.WriteLine("=======================================");
-    
-  
+    Console.WriteLine($"\n==================================================");
+    Console.WriteLine($"$ REGISTRO DE DATOS - EMPLEADO {contador}");
+    Console.WriteLine($"==================================================");
+
     Empleado empActual = new Empleado();
 
     Console.Write("Nombre: ");
-    string inputNombre = Console.ReadLine();
-    empActual.Nombre = inputNombre ?? "";
+    empActual.Nombre = Console.ReadLine();
 
     Console.Write("Apellido: ");
-    string inputApellido = Console.ReadLine();
-    empActual.Apellido = inputApellido ?? "";
+    empActual.Apellido = Console.ReadLine();
 
-  
     bool fechaNacValida = false;
     while (!fechaNacValida)
     {
         Console.Write("Fecha de Nacimiento (AAAA-MM-DD): ");
-        string inputFecha = Console.ReadLine();
-        if (DateTime.TryParse(inputFecha, out DateTime fechaNac))
+        if (DateTime.TryParse(Console.ReadLine(), out DateTime fechaNac))
         {
             empActual.FechaNacimiento = fechaNac;
             fechaNacValida = true;
@@ -40,6 +31,7 @@ while (contador <= 3)
             Console.WriteLine("Formato de fecha inválido. Intente nuevamente.");
         }
     }
+
 
     Console.Write("Estado Civil (C: Casado, S: Soltero, D: Divorciado, V: Viudo): ");
     string inputCivil = Console.ReadLine();
@@ -56,8 +48,7 @@ while (contador <= 3)
     while (!fechaIngValida)
     {
         Console.Write("Fecha de Ingreso a la Empresa (AAAA-MM-DD): ");
-        string inputFechaIng = Console.ReadLine();
-        if (DateTime.TryParse(inputFechaIng, out DateTime fechaIng))
+        if (DateTime.TryParse(Console.ReadLine(), out DateTime fechaIng))
         {
             empActual.FechaIngreso = fechaIng;
             fechaIngValida = true;
@@ -68,13 +59,11 @@ while (contador <= 3)
         }
     }
 
-    
     bool sueldoValido = false;
     while (!sueldoValido)
     {
         Console.Write("Sueldo Básico ($): ");
-        string inputSueldo = Console.ReadLine();
-        if (double.TryParse(inputSueldo, out double sueldo))
+        if (double.TryParse(Console.ReadLine(), out double sueldo))
         {
             empActual.SueldoBasico = sueldo;
             sueldoValido = true;
@@ -85,14 +74,13 @@ while (contador <= 3)
         }
     }
 
-    // Asignación guiada del cargo en formato texto
     bool cargoValido = false;
     while (!cargoValido)
     {
         Console.WriteLine("Seleccione el Cargo:");
-        Console.WriteLine(" 1: Auxiliar | 2: Administrativo | 3: Ingeniero | 4: Especialista | 5: Investigador");
+        Console.WriteLine("1: Auxiliar | 2: Administrativo | 3: Ingeniero | 4: Especialista | 5: Investigador");
         Console.Write("Opción (1-5): ");
-        string? opcionCargo = Console.ReadLine();
+        string opcionCargo = Console.ReadLine();
 
         if (opcionCargo == "1") { empActual.Cargo = "Auxiliar"; cargoValido = true; }
         else if (opcionCargo == "2") { empActual.Cargo = "Administrativo"; cargoValido = true; }
@@ -102,54 +90,42 @@ while (contador <= 3)
         else { Console.WriteLine("Opción incorrecta. Intente de nuevo."); }
     }
 
-   
-    if (contador == 1)
-    {
-        emp1 = empActual;
-    }
-    else if (contador == 2)
-    {
-        emp2 = empActual;
-    }
-    else
-    {
-        emp3 = empActual;
-    }
+    listaEmpleados[contador - 1] = empActual;
 
-    contador = contador + 1; // Pasamos al siguiente empleado
+    contador++;
 }
 
-
-double liquidacionTotal = emp1.Salario + emp2.Salario + emp3.Salario;
-
-Console.WriteLine("\n=========================================");
-Console.WriteLine(" RESUMEN FINANCIERO DE LA EMPRESA");
-Console.WriteLine("=========================================");
-Console.WriteLine($"Monto Total Neto de Salarios a pagar: ${liquidacionTotal}");
-
-
-Empleado empleadoMasCercanoARetiro = emp1;
-
-if (emp2.AniosParaJubilarse < empleadoMasCercanoARetiro.AniosParaJubilarse)
+double liquidacionTotal = 0;
+Console.WriteLine("\n--- RESUMEN DE LIQUIDACIÓN ---");
+foreach (Empleado emp in listaEmpleados)
 {
-    empleadoMasCercanoARetiro = emp2;
+    Console.WriteLine($"Agente: {emp.Apellido}, {emp.Nombre} | Salario: ${emp.Salario:N2}");
+    liquidacionTotal += emp.Salario;
 }
 
-if (emp3.AniosParaJubilarse < empleadoMasCercanoARetiro.AniosParaJubilarse)
+Console.WriteLine("\n==================================================");
+Console.WriteLine($"[PUNTO 2.d] Monto Total Neto de Salarios a pagar: ${liquidacionTotal:N2}");
+Console.WriteLine("==================================================");
+
+Empleado empleadoMasCercanoRetiro = listaEmpleados[0];
+
+foreach (Empleado emp in listaEmpleados)
 {
-    empleadoMasCercanoARetiro = emp3;
+    if (emp.AniosParaJubilarse < empleadoMasCercanoRetiro.AniosParaJubilarse)
+    {
+        empleadoMasCercanoRetiro = emp;
+    }
 }
 
-// Presentación de la ficha del empleado seleccionado
-Console.WriteLine("\n=========================================");
-Console.WriteLine(" AGENTE MÁS PRÓXIMO A INSTANCIA DE JUBILACIÓN");
-Console.WriteLine("=========================================");
-Console.WriteLine($"Apellido y Nombre: {empleadoMasCercanoARetiro.Apellido}, {empleadoMasCercanoARetiro.Nombre}");
-Console.WriteLine($"Edad Cronológica: {empleadoMasCercanoARetiro.Edad} años");
-Console.WriteLine($"Tiempo de Servicio (Antigüedad): {empleadoMasCercanoARetiro.Antiguedad} años");
-Console.WriteLine($"Cargo Operativo: {empleadoMasCercanoARetiro.Cargo}");
-Console.WriteLine($"Años faltantes para jubilarse: {empleadoMasCercanoARetiro.AniosParaJubilarse} años");
-Console.WriteLine($"Asignación Básica: ${empleadoMasCercanoARetiro.SueldoBasico}");
-Console.WriteLine($"Beneficios Adicionales: ${empleadoMasCercanoARetiro.CalcularAdicional()}");
-Console.WriteLine($"Haberes Totales Líquidos: ${empleadoMasCercanoARetiro.Salario}");
-Console.WriteLine("=========================================");
+Console.WriteLine("\n==================================================");
+Console.WriteLine("    AGENTE MÁS PRÓXIMO A INSTANCIA DE JUBILACIÓN   ");
+Console.WriteLine("==================================================");
+Console.WriteLine($"Apellido y Nombre: {empleadoMasCercanoRetiro.Apellido}, {empleadoMasCercanoRetiro.Nombre}");
+Console.WriteLine($"Edad Cronológica: {empleadoMasCercanoRetiro.Edad} años");
+Console.WriteLine($"Tiempo de Servicio (Antigüedad): {empleadoMasCercanoRetiro.Antiguedad} años");
+Console.WriteLine($"Cargo Operativo: {empleadoMasCercanoRetiro.Cargo}");
+Console.WriteLine($"Años faltantes para jubilarse: {empleadoMasCercanoRetiro.AniosParaJubilarse} años");
+Console.WriteLine($"Asignación Básica: ${empleadoMasCercanoRetiro.SueldoBasico:N2}");
+Console.WriteLine($"Beneficios Adicionales: ${empleadoMasCercanoRetiro.CalcularAdicional():N2}");
+Console.WriteLine($"Haberes Totales Líquidos: ${empleadoMasCercanoRetiro.Salario:N2}");
+Console.WriteLine("==================================================");

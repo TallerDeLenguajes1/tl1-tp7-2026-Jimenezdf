@@ -2,56 +2,13 @@ namespace SisPersonal;
 
 public class Empleado
 {
-    
-    private string nombre;
-    private string apellido;
-    private DateTime fechaNacimiento;
-    private char estadoCivil;
-    private DateTime fechaIngreso;
-    private double sueldoBasico;
-    private string cargo;
-
-    public string Nombre
-    {
-        get { return nombre; }
-        set { nombre = value; }
-    }
-
-    public string Apellido
-    {
-        get { return apellido; }
-        set { apellido = value; }
-    }
-
-    public DateTime FechaNacimiento
-    {
-        get { return fechaNacimiento; }
-        set { fechaNacimiento = value; }
-    }
-
-    public char EstadoCivil
-    {
-        get { return estadoCivil; }
-        set { estadoCivil = value; }
-    }
-
-    public DateTime FechaIngreso
-    {
-        get { return fechaIngreso; }
-        set { fechaIngreso = value; }
-    }
-
-    public double SueldoBasico
-    {
-        get { return sueldoBasico; }
-        set { sueldoBasico = value; }
-    }
-
-    public string Cargo
-    {
-        get { return cargo; }
-        set { cargo = value; }
-    }
+public string Nombre { get; set; }
+    public string Apellido { get; set; }
+    public DateTime FechaNacimiento { get; set; }
+    public char EstadoCivil { get; set; }
+    public DateTime FechaIngreso { get; set; }
+    public double SueldoBasico { get; set; }
+    public string Cargo { get; set; }
 
 
     
@@ -60,8 +17,8 @@ public class Empleado
         get
         {
            
-            int anios = DateTime.Today.Year - fechaIngreso.Year;
-            if (DateTime.Today < fechaIngreso.AddYears(anios))
+            int anios = DateTime.Today.Year - FechaIngreso.Year;
+            if (DateTime.Today < FechaIngreso.AddYears(anios))
             {
                 anios--;
             }
@@ -73,9 +30,8 @@ public class Empleado
     {
         get
         {
-            // Usamos el campo privado fechaNacimiento directamente
-            int edadActual = DateTime.Today.Year - fechaNacimiento.Year;
-            if (DateTime.Today < fechaNacimiento.AddYears(edadActual))
+            int edadActual = DateTime.Today.Year - FechaNacimiento.Year;
+            if (DateTime.Today < FechaNacimiento.AddYears(edadActual))
             {
                 edadActual--;
             }
@@ -102,7 +58,7 @@ public class Empleado
         get
         {
             
-            return sueldoBasico + CalcularAdicional();
+            return SueldoBasico + CalcularAdicional();
         }
     }
 
@@ -116,16 +72,16 @@ public class Empleado
         }
         
         
-        double adicionalBase = sueldoBasico * (porcentajeAntiguedad / 100.0);
+        double adicionalBase = SueldoBasico * (porcentajeAntiguedad / 100.0);
 
        
-        if (cargo == "Ingeniero" || cargo == "Especialista")
+        if (Cargo == "Ingeniero" || Cargo == "Especialista")
         {
             adicionalBase = adicionalBase * 1.5;
         }
 
         
-        if (char.ToUpper(estadoCivil) == 'C')
+        if (char.ToUpper(EstadoCivil) == 'C')
         {
             adicionalBase = adicionalBase + 150000;
         }
